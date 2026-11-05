@@ -868,6 +868,8 @@
                   "zero-token/zero-token-requirements",
                   "zero-token/upstream-sync",
                   "zero-token/web-models-support",
+                  "zero-token/eve",
+                  "zero-token/pinecone-eve",
                   "zero-token/web-models-browser-modes",
                   "zero-token/plans/2026-03-28-zero-token-refactor"
                 ]

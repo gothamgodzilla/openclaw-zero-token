@@ -716,6 +716,8 @@ importers:
 
   src/zero-token/extensions/askonce: {}
 
+  src/zero-token/extensions/eve-bridge: {}
+
   ui:
     dependencies:
       '@create-markdown/preview':

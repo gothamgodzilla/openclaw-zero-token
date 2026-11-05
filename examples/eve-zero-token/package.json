@@ -1,0 +1,15 @@
+{
+  "name": "eve-zero-token-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "eve dev"
+  },
+  "dependencies": {
+    "@ai-sdk/openai-compatible": "^2.0.0",
+    "eve": "latest"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

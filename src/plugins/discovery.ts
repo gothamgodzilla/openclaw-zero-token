@@ -3,6 +3,7 @@ import path from "node:path";
 import { matchBoundaryFileOpenFailure, openBoundaryFileSync } from "../infra/boundary-file-read.js";
 import { resolveUserPath } from "../utils.js";
 import { detectBundleManifestFormat, loadBundleManifest } from "./bundle-manifest.js";
+import { resolveZeroTokenBundledPluginsDir } from "./bundled-dir.js";
 import {
   BUNDLED_PLUGIN_METADATA,
   resolveBundledPluginGeneratedPath,
@@ -91,8 +92,9 @@ function buildDiscoveryCacheKey(params: {
   const workspaceKey = roots.workspace ?? "";
   const configExtensionsRoot = roots.global ?? "";
   const bundledRoot = roots.stock ?? "";
+  const zeroTokenRoot = resolveZeroTokenBundledPluginsDir(params.env) ?? "";
   const ownershipUid = params.ownershipUid ?? currentUid();
-  return `${workspaceKey}::${ownershipUid ?? "none"}::${configExtensionsRoot}::${bundledRoot}::${JSON.stringify(loadPaths)}`;
+  return `${workspaceKey}::${ownershipUid ?? "none"}::${configExtensionsRoot}::${bundledRoot}::${zeroTokenRoot}::${JSON.stringify(loadPaths)}`;
 }
 
 function currentUid(overrideUid?: number | null): number | null {
@@ -788,6 +790,25 @@ function discoverFromPath(params: {
   }
 }
 
+function collectStockPluginDirectoryNames(stockDir: string | undefined): Set<string> {
+  const names = new Set<string>();
+  for (const entry of BUNDLED_PLUGIN_METADATA) {
+    names.add(entry.dirName);
+  }
+  if (stockDir && fs.existsSync(stockDir)) {
+    try {
+      for (const entry of fs.readdirSync(stockDir, { withFileTypes: true })) {
+        if (entry.isDirectory()) {
+          names.add(entry.name);
+        }
+      }
+    } catch {
+      // ignore unreadable stock plugin dirs
+    }
+  }
+  return names;
+}
+
 function discoverBundledMetadataInDirectory(params: {
   dir: string;
   ownershipUid?: number | null;
@@ -921,6 +942,19 @@ export function discoverOpenClawPlugins(params: {
       diagnostics,
       seen,
       ...(coveredBundledDirectories ? { skipDirectories: coveredBundledDirectories } : {}),
+    });
+  }
+
+  const zeroTokenDir = resolveZeroTokenBundledPluginsDir(env);
+  if (zeroTokenDir && zeroTokenDir !== roots.stock) {
+    discoverInDirectory({
+      dir: zeroTokenDir,
+      origin: "bundled",
+      ownershipUid: params.ownershipUid,
+      candidates,
+      diagnostics,
+      seen,
+      skipDirectories: collectStockPluginDirectoryNames(roots.stock),
     });
   }
 
