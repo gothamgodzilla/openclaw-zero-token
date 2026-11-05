@@ -82,6 +82,7 @@
 | 2026-03-28 | **补齐 Web 接线**：`perplexity-web` / `qwen-cn-web` 注册进 **`web-stream-factories`** 与 **`resolveImplicitProviders`**；新增 **`buildPerplexityWebProvider`**；`glm-intl-web` 与其它 Web 渠道同为无条件合并；**`docs/zero-token/upstream-sync.md`** 与当前目录对齐；**`release-check`** 对捆绑扩展按 id 去重；**`discovery`** 注释说明 bundled 扫描会 chmod 目录。 |
 | 2026-03-28 | **文档目录**：Zero Token 专用说明收拢至 **`docs/zero-token/`**（索引见 `docs/zero-token/index.md`）；原 `docs/` 根路径同名页在 Mintlify 增加 **redirect** 至新路径。                                                                                                                                                                                                |
 | 2026-11-05 | **Eve 桥**：捆绑 `eve-bridge` 插件提供 **`/zero-token/v1/models`** 与 **`/zero-token/v1/chat/completions`**（网页模型直出，不是 Gateway agent 端点）；示例见 `examples/eve-zero-token/`，说明见 `docs/zero-token/eve.md`。                                                                                                                                          |
+| 2026-11-05 | **Eve + Pinecone Assistant**：捆绑 `pinecone-assistant` 插件提供 **`/zero-token/pinecone/v1`**（list/create/context/chat/upload text）。Eve 用 context 片段 + Zero Token 网页模型作答，避免套用 Pinecone 托管 LLM。`PINECONE_API_KEY` 留在 Gateway。说明见 `docs/zero-token/pinecone-eve.md`。                                                                      |
 
 _后续优化（例如选定「调试 Chrome / 扩展桥」最终方案、迁移某 Provider 出 core）请在本表追加一行。_
 

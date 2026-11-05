@@ -1,0 +1,12 @@
+{
+  "name": "@openclaw/pinecone-assistant",
+  "version": "2026.3.28",
+  "private": true,
+  "description": "Gateway HTTP for Pinecone Assistant so Eve can retrieve cited context",
+  "type": "module",
+  "openclaw": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  }
+}

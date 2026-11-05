@@ -16,6 +16,7 @@
 - [与上游同步说明](docs/zero-token/upstream-sync.md)
 - [Web 模型浏览器模式](docs/zero-token/web-models-browser-modes.md)
 - [Eve + Zero Token](docs/zero-token/eve.md)
+- [Eve + Pinecone Assistant](docs/zero-token/pinecone-eve.md)
 - [实现原理](#实现原理)
 - [快速开始](#快速开始)
 - [使用方式](#使用方式)

@@ -76,6 +76,10 @@ Set `modelContextWindowTokens` yourself. Eve has no AI Gateway catalog for custo
 
 Eve can already use a local ChatGPT subscription via `chatgpt()` from `eve/models/openai` and `/login`. Use this bridge when you want Claude Web, DeepSeek, Qwen, Kimi, or the other Zero Token providers, or one Eve agent that can switch among them.
 
+## Pinecone Assistant
+
+To answer from documents with citations, enable the bundled `pinecone-assistant` plugin and use the Eve tools in `examples/eve-zero-token/`. Eve retrieves snippets from `/zero-token/pinecone/v1`, then writes the answer with the Zero Token web model. See [Eve + Pinecone Assistant](/zero-token/pinecone-eve).
+
 ## Disable
 
 ```json5
@@ -92,4 +96,5 @@ Eve can already use a local ChatGPT subscription via `chatgpt()` from `eve/model
 
 - [Web models](/zero-token/web-models-support)
 - [OpenAI Chat Completions (agent endpoint)](/gateway/openai-http-api)
+- [Eve + Pinecone Assistant](/zero-token/pinecone-eve)
 - [Eve docs](https://eve.dev/docs)

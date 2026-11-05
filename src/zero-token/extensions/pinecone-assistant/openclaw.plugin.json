@@ -1,0 +1,24 @@
+{
+  "id": "pinecone-assistant",
+  "name": "Pinecone Assistant",
+  "description": "Cited RAG via Pinecone Assistant for Eve agents on Zero Token web models",
+  "enabledByDefault": true,
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "apiKey": {
+        "type": "string"
+      },
+      "defaultAssistant": {
+        "type": "string"
+      },
+      "controlPlaneUrl": {
+        "type": "string"
+      },
+      "dataHost": {
+        "type": "string"
+      }
+    }
+  }
+}
