@@ -10,6 +10,8 @@
 - **`src/zero-token/streams/`** — `*-web-stream.ts`、`web-stream-factories.ts`（`model.api` → `StreamFn`）
 - **`src/zero-token/bridge/web-providers.ts`** — Web 的 baseUrl、默认模型、`build*WebProvider` / `discover*WebModels`
 - **`src/zero-token/extensions/askonce/`** — 捆绑 AskOnce 插件（`@openclaw/askonce`）
+- **`src/zero-token/extensions/eve-bridge/`** — Eve 用的 OpenAI 兼容 `/zero-token/v1` 路由
+- **`src/zero-token/eve/`** — 模型目录、OpenAI 兼容编解码、网页补全 runner
 - **`start-chrome-debug.sh`、`onboard.sh`、`server.sh`**（若存在）
 - **`docs/zero-token/zero-token-requirements.md`**、**`docs/zero-token/web-models-support.md`**、**`docs/zero-token/web-models-browser-modes.md`**、**`docs/zero-token/upstream-sync.md`**（本文档）、**`docs/zero-token/index.md`**
 
@@ -28,7 +30,7 @@
 ### 配置与插件发现 / 打包
 
 - **`src/config/types.models.ts`** — `ModelApi` 含各 `*-web`
-- **`src/plugins/bundled-dir.ts`**、**`src/plugins/discovery.ts`** — 扫描 `extensions/` 与 **`src/zero-token/extensions/`**；`discoverOpenClawPlugins` 使用传入的 `env` 解析 bundled / config 目录
+- **`src/plugins/bundled-dir.ts`**、**`src/plugins/discovery.ts`** — 扫描 `extensions/` 与 **`src/zero-token/extensions/`**（`resolveZeroTokenBundledPluginsDir` / `OPENCLAW_ZERO_TOKEN_PLUGINS_DIR`）；`discoverOpenClawPlugins` 使用传入的 `env` 解析 bundled / config 目录
 - **`pnpm-workspace.yaml`** — 含 `src/zero-token/extensions/*`
 - **`package.json` `files`** — 含 `src/zero-token/extensions/`
 - **`Dockerfile`** — 运行时 COPY `src/zero-token/extensions`

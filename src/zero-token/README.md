@@ -9,6 +9,8 @@ This directory holds **browser-based / cookie-based “web” model** implementa
 - **`providers/`** — Site clients and auth helpers (`*-web-client*.ts`, `*-web-auth.ts`).
 - **`streams/`** — `StreamFn` factories and `web-stream-factories.ts` (`model.api` → factory).
 - **`extensions/askonce/`** — Bundled AskOnce plugin (multi-model “ask once” CLI); workspace package `@openclaw/askonce`.
+- **`extensions/eve-bridge/`** — OpenAI-compatible `/zero-token/v1` routes for [Eve](https://eve.dev/docs) agents.
+- **`eve/`** — Model catalog, OpenAI request/SSE helpers, and the web completion runner used by the bridge.
 
 ## Bridge modules (under `bridge/`)
 

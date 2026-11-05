@@ -1,0 +1,11 @@
+{
+  "id": "eve-bridge",
+  "name": "Eve Zero Token Bridge",
+  "description": "OpenAI-compatible /zero-token/v1 routes so Eve agents can use Zero Token web models",
+  "enabledByDefault": true,
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {}
+  }
+}

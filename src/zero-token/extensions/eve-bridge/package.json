@@ -1,0 +1,12 @@
+{
+  "name": "@openclaw/eve-bridge",
+  "version": "2026.3.28",
+  "private": true,
+  "description": "OpenAI-compatible Zero Token routes for Eve agents",
+  "type": "module",
+  "openclaw": {
+    "extensions": [
+      "./src/index.ts"
+    ]
+  }
+}

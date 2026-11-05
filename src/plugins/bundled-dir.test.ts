@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { resolveBundledPluginsDir } from "./bundled-dir.js";
+import { resolveBundledPluginsDir, resolveZeroTokenBundledPluginsDir } from "./bundled-dir.js";
 
 const tempDirs: string[] = [];
 const originalBundledDir = process.env.OPENCLAW_BUNDLED_PLUGINS_DIR;
@@ -229,5 +229,36 @@ describe("resolveBundledPluginsDir", () => {
     },
   ] as const)("$name", ({ createScenario }) => {
     expectInstalledBundledDirScenarioCase(createScenario);
+  });
+});
+
+describe("resolveZeroTokenBundledPluginsDir", () => {
+  const originalZeroTokenDir = process.env.OPENCLAW_ZERO_TOKEN_PLUGINS_DIR;
+
+  afterEach(() => {
+    if (originalZeroTokenDir === undefined) {
+      delete process.env.OPENCLAW_ZERO_TOKEN_PLUGINS_DIR;
+    } else {
+      process.env.OPENCLAW_ZERO_TOKEN_PLUGINS_DIR = originalZeroTokenDir;
+    }
+  });
+
+  it("returns undefined when the extra scan is explicitly disabled", () => {
+    expect(
+      resolveZeroTokenBundledPluginsDir({ OPENCLAW_ZERO_TOKEN_PLUGINS_DIR: "" }),
+    ).toBeUndefined();
+  });
+
+  it("resolves an explicit existing override", () => {
+    const dir = makeRepoRoot("openclaw-zero-token-plugins-");
+    expect(resolveZeroTokenBundledPluginsDir({ OPENCLAW_ZERO_TOKEN_PLUGINS_DIR: dir })).toBe(dir);
+  });
+
+  it("ignores a missing override", () => {
+    expect(
+      resolveZeroTokenBundledPluginsDir({
+        OPENCLAW_ZERO_TOKEN_PLUGINS_DIR: "/nonexistent/zero-token-plugins",
+      }),
+    ).toBeUndefined();
   });
 });

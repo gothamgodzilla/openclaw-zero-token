@@ -116,3 +116,43 @@ export function resolveBundledPluginsDir(env: NodeJS.ProcessEnv = process.env): 
 
   return undefined;
 }
+
+/**
+ * Zero Token bundled plugins live under `src/zero-token/extensions/` so they
+ * stay off the upstream `extensions/` merge surface.
+ *
+ * Set `OPENCLAW_ZERO_TOKEN_PLUGINS_DIR` to an explicit directory, or `""` to
+ * disable the extra scan (used by plugin-discovery tests).
+ */
+export function resolveZeroTokenBundledPluginsDir(
+  env: NodeJS.ProcessEnv = process.env,
+): string | undefined {
+  if (env.OPENCLAW_ZERO_TOKEN_PLUGINS_DIR === "") {
+    return undefined;
+  }
+  const override = env.OPENCLAW_ZERO_TOKEN_PLUGINS_DIR?.trim();
+  if (override) {
+    const resolvedOverride = resolveUserPath(override, env);
+    return fs.existsSync(resolvedOverride) ? resolvedOverride : undefined;
+  }
+
+  try {
+    const packageRoots = [
+      resolveOpenClawPackageRootSync({ argv1: process.argv[1] }),
+      resolveOpenClawPackageRootSync({ cwd: process.cwd() }),
+      resolveOpenClawPackageRootSync({ moduleUrl: import.meta.url }),
+    ].filter(
+      (entry, index, all): entry is string => Boolean(entry) && all.indexOf(entry) === index,
+    );
+    for (const packageRoot of packageRoots) {
+      const candidate = path.join(packageRoot, "src", "zero-token", "extensions");
+      if (fs.existsSync(candidate)) {
+        return candidate;
+      }
+    }
+  } catch {
+    // ignore
+  }
+
+  return undefined;
+}

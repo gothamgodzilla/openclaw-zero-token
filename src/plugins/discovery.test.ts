@@ -38,6 +38,7 @@ function buildDiscoveryEnv(stateDir: string): NodeJS.ProcessEnv {
     OPENCLAW_STATE_DIR: stateDir,
     OPENCLAW_HOME: undefined,
     OPENCLAW_BUNDLED_PLUGINS_DIR: "/nonexistent/bundled/plugins",
+    OPENCLAW_ZERO_TOKEN_PLUGINS_DIR: "",
   };
 }
 
@@ -832,5 +833,51 @@ describe("discoverOpenClawPlugins", () => {
 
     expectCandidateOrder(first.candidates, ["alpha", "beta"]);
     expectCandidateOrder(second.candidates, ["beta", "alpha"]);
+  });
+
+  it("discovers Zero Token bundled plugins and skips stock dirName duplicates", () => {
+    const stateDir = makeTempDir();
+    const stockDir = path.join(stateDir, "stock");
+    const zeroTokenDir = path.join(stateDir, "zero-token-extensions");
+
+    const writeDirPlugin = (root: string, dirName: string, id: string) => {
+      const pluginDir = path.join(root, dirName);
+      mkdirSafe(pluginDir);
+      fs.writeFileSync(
+        path.join(pluginDir, "index.ts"),
+        `export default { id: ${JSON.stringify(id)} }`,
+        "utf-8",
+      );
+      writePluginPackageManifest({
+        packageDir: pluginDir,
+        packageName: `@openclaw/${id}`,
+        extensions: ["./index.ts"],
+      });
+      fs.writeFileSync(
+        path.join(pluginDir, "openclaw.plugin.json"),
+        JSON.stringify({ id }),
+        "utf-8",
+      );
+      return pluginDir;
+    };
+
+    const stockShared = writeDirPlugin(stockDir, "shared-plugin", "shared-plugin");
+    writeDirPlugin(zeroTokenDir, "shared-plugin", "shared-plugin");
+    const eveBridgeDir = writeDirPlugin(zeroTokenDir, "eve-bridge", "eve-bridge");
+
+    const result = discoverOpenClawPlugins({
+      env: {
+        ...buildDiscoveryEnv(stateDir),
+        OPENCLAW_BUNDLED_PLUGINS_DIR: stockDir,
+        OPENCLAW_ZERO_TOKEN_PLUGINS_DIR: zeroTokenDir,
+      },
+    });
+
+    expectCandidatePresence(result, { present: ["shared-plugin", "eve-bridge"] });
+    expect(
+      result.candidates.filter((candidate) => candidate.idHint === "shared-plugin"),
+    ).toHaveLength(1);
+    expect(findCandidateById(result.candidates, "shared-plugin")?.rootDir).toBe(stockShared);
+    expect(findCandidateById(result.candidates, "eve-bridge")?.rootDir).toBe(eveBridgeDir);
   });
 });
